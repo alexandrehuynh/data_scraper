@@ -1,5 +1,6 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, TooltipProps } from 'recharts';
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
 const GooglePlayAnalysis: React.FC = () => {
   // Rating Distribution Data
@@ -75,6 +76,17 @@ const GooglePlayAnalysis: React.FC = () => {
     { name: '14.26.2', value: 6 },
     { name: '14.24.0', value: 6 }
   ];
+
+  // Type-safe formatter functions
+  const reviewFormatter = (value: ValueType, name?: NameType) => [`${value} reviews`, 'Count'];
+  const mentionsFormatter = (value: ValueType) => [`${value} mentions`, 'Count'];
+  const occurrencesFormatter = (value: ValueType) => [`${value} occurrences`, 'Count'];
+  const ratingFormatter = (value: ValueType) => [`${value}`, 'Average Rating'];
+  const platformFormatter = (value: ValueType, name?: NameType) => [
+    name === 'rating' ? `${value}/5` : value, 
+    name === 'rating' ? 'Rating' : 'Reviews'
+  ];
+  const negativeReviewsFormatter = (value: ValueType) => [`${value} negative reviews`, 'Count'];
   
   return (
     <div className="container mx-auto p-4">
@@ -90,7 +102,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value} reviews`, 'Count']} />
+              <Tooltip formatter={reviewFormatter} />
               <Legend />
               <Bar dataKey="value" name="Number of Reviews" fill="#8884d8">
                 {ratingDistribution.map((entry, index) => (
@@ -112,7 +124,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
               <YAxis dataKey="name" type="category" width={120} />
-              <Tooltip formatter={(value) => [`${value} mentions`, 'Count']} />
+              <Tooltip formatter={mentionsFormatter} />
               <Legend />
               <Bar dataKey="value" name="Mentions" radius={[0, 4, 4, 0]}>
                 {commonTopics.slice(0, 6).map((entry, index) => (
@@ -136,7 +148,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value} occurrences`, 'Count']} />
+              <Tooltip formatter={occurrencesFormatter} />
               <Legend />
               <Bar dataKey="value" name="Occurrences" fill="#E91E63" />
             </BarChart>
@@ -154,7 +166,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis domain={[1, 5]} />
-              <Tooltip formatter={(value) => [`${value}`, 'Average Rating']} />
+              <Tooltip formatter={ratingFormatter} />
               <Legend />
               <Line type="monotone" dataKey="rating" name="Average Rating" stroke="#E91E63" strokeWidth={2} />
             </LineChart>
@@ -173,7 +185,7 @@ const GooglePlayAnalysis: React.FC = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis domain={[0, 5]} />
-            <Tooltip formatter={(value, name) => [name === 'rating' ? `${value}/5` : value, name === 'rating' ? 'Rating' : 'Reviews']} />
+            <Tooltip formatter={platformFormatter} />
             <Legend />
             <Bar dataKey="rating" name="Average Rating" fill="#673AB7">
               {platformComparison.map((entry, index) => (
@@ -197,7 +209,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
               <YAxis dataKey="name" type="category" width={120} />
-              <Tooltip formatter={(value) => [`${value} mentions`, 'Count']} />
+              <Tooltip formatter={mentionsFormatter} />
               <Legend />
               <Bar dataKey="value" name="Mentions" fill="#FF5722" />
             </BarChart>
@@ -215,7 +227,7 @@ const GooglePlayAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value} negative reviews`, 'Count']} />
+              <Tooltip formatter={negativeReviewsFormatter} />
               <Legend />
               <Bar dataKey="value" name="Negative Reviews" fill="#9C27B0" />
             </BarChart>

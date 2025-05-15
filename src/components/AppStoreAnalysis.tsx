@@ -1,5 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
 const AppStoreAnalysis: React.FC = () => {
   // Rating Distribution Data
@@ -59,6 +60,12 @@ const AppStoreAnalysis: React.FC = () => {
     "Insurance integration confusion"
   ];
   
+  // Type-safe formatter functions
+  const reviewFormatter = (value: ValueType, name?: NameType) => [`${value} reviews`, 'Count'];
+  const mentionsFormatter = (value: ValueType) => [`${value} mentions`, 'Count'];
+  const occurrencesFormatter = (value: ValueType) => [`${value} occurrences`, 'Count'];
+  const ratingFormatter = (value: ValueType) => [`${value}`, 'Average Rating'];
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-center">OnePass App - App Store Reviews Analysis</h1>
@@ -73,7 +80,7 @@ const AppStoreAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value} reviews`, 'Count']} />
+              <Tooltip formatter={reviewFormatter} />
               <Legend />
               <Bar dataKey="value" name="Number of Reviews" fill="#8884d8">
                 {ratingDistribution.map((entry, index) => (
@@ -95,7 +102,7 @@ const AppStoreAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
               <YAxis dataKey="name" type="category" width={100} />
-              <Tooltip formatter={(value) => [`${value} mentions`, 'Count']} />
+              <Tooltip formatter={mentionsFormatter} />
               <Legend />
               <Bar dataKey="value" name="Mentions" radius={[0, 4, 4, 0]}>
                 {commonTopics.map((entry, index) => (
@@ -119,7 +126,7 @@ const AppStoreAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value} occurrences`, 'Count']} />
+              <Tooltip formatter={occurrencesFormatter} />
               <Legend />
               <Bar dataKey="value" name="Occurrences" fill="#3f51b5" />
             </BarChart>
@@ -137,7 +144,7 @@ const AppStoreAnalysis: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis domain={[3, 5]} />
-              <Tooltip formatter={(value) => [`${value}`, 'Average Rating']} />
+              <Tooltip formatter={ratingFormatter} />
               <Legend />
               <Line type="monotone" dataKey="rating" name="Average Rating" stroke="#8884d8" strokeWidth={2} />
             </LineChart>
