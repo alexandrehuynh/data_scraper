@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import OnePassAnalysis from '../onepass-analysis';
-import GooglePlayAnalysis from '../google-play-analysis';
+import AppStoreAnalysis from './components/AppStoreAnalysis';
+import GooglePlayAnalysis from './components/GooglePlayAnalysis';
 import './App.css';
 
 const App: React.FC = () => {
@@ -42,7 +42,7 @@ const App: React.FC = () => {
         </div>
         
         {activeTab === 'appstore' ? (
-          <OnePassAnalysis />
+          <AppStoreAnalysis />
         ) : (
           <GooglePlayAnalysis />
         )}
