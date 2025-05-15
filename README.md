@@ -6,13 +6,33 @@ A Python project for scraping app reviews from both Google Play Store and Apple 
 
 This tool helps collect app reviews from mobile app stores to analyze user feedback. The project contains:
 
-- Google Play Store review scraper
-- App Store metadata fetcher
+- Google Play Store review scraper - Fully functional
+- App Store review scrapers - Two approaches due to Apple restrictions
 
 ## Project Structure
 
-- `googleplay_scraper.py`: Script to scrape reviews from Google Play Store
-- `appstore_final_scraper.py`: Script to fetch app metadata from Apple App Store
+- `googleplay_scraper.py`: Scrapes reviews from Google Play Store (full functionality)
+- `appstore_api_scraper.py`: Attempts to use various API methods to get App Store reviews (limited success)
+- `appstore_browser_scraper.py`: Uses Selenium browser automation to scrape App Store reviews directly from the web interface (most reliable method for App Store)
+- `appstore_final_scraper.py`: A metadata-only scraper that explains Apple's API restrictions
+
+## Apple App Store Review Scraping Challenges
+
+Apple has implemented strict API restrictions that make it difficult to programmatically access App Store reviews. Here's what we've learned:
+
+1. **API Restrictions**: Apple's official API doesn't provide direct access to user reviews
+2. **RSS Feed Deprecation**: The old RSS feed method no longer works (returns 500 errors)
+3. **StoreFront API Limitations**: The internal StoreFront API requires authentication tokens that are difficult to extract and use
+
+Our solutions:
+
+1. **Browser Automation (Most Reliable)**: `appstore_browser_scraper.py` uses Selenium to automate a web browser, visit the App Store page, and extract reviews directly from the HTML. This is the most reliable method but requires Chrome and ChromeDriver installed.
+
+2. **API Attempts**: `appstore_api_scraper.py` tries multiple API-based methods but has limited success due to Apple's restrictions.
+
+## Google Play Store
+
+The `googleplay_scraper.py` script works reliably to extract reviews from Google Play using the `google-play-scraper` library.
 
 ## Installation
 
@@ -30,7 +50,7 @@ python -m venv venv
 3. Activate the virtual environment:
 ```bash
 # On Windows
-venv\Scripts\activate
+venv\\Scripts\\activate
 
 # On macOS/Linux
 source venv/bin/activate
@@ -43,36 +63,34 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Google Play Store Reviews
-
-To scrape reviews from Google Play:
+### Google Play Reviews
 
 ```bash
 python googleplay_scraper.py
 ```
 
-This will create:
-- `one_pass_googleplay_reviews.csv`
-- `one_pass_googleplay_reviews.json`
+### App Store Reviews
 
-### App Store Metadata
-
-To fetch app metadata from the App Store:
-
+For browser automation approach (most reliable):
 ```bash
-python appstore_final_scraper.py
+python appstore_browser_scraper.py
 ```
 
-This will create:
-- `one_pass_appstore_reviews.csv` (with metadata)
-- `one_pass_appstore_reviews.json` (with metadata)
+For API attempt approach:
+```bash
+python appstore_api_scraper.py
+```
 
-## Notes
+## Output
 
-- Due to Apple's API restrictions, direct programmatic access to App Store reviews is limited. The App Store scraper fetches metadata but directs users to the actual App Store page to view reviews.
-- Google Play reviews can be accessed and scraped without restrictions.
+The scripts generate both CSV and JSON files containing the scraped reviews:
 
-## Requirements
+- `one_pass_googleplay_reviews.csv`/`.json`: Google Play reviews
+- `one_pass_appstore_reviews_browser.csv`/`.json`: App Store reviews from browser automation
+- `one_pass_appstore_reviews_api.csv`/`.json`: App Store data from API attempts
 
-- Python 3.6+
-- Required Python packages are listed in `requirements.txt` 
+## Limitations
+
+- App Store scraping is challenging due to Apple's API restrictions
+- The browser automation approach requires Chrome and ChromeDriver installed
+- The number of reviews that can be scraped may be limited by the app stores 

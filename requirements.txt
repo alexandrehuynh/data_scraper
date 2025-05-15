@@ -2,5 +2,8 @@ google-play-scraper
 pandas
 unicodecsv # For app_store_review_extractor
 requests # For app_store_review_extractor
-urllib3>=1.26.0,<2.0.0 # Try a newer urllib3
-six 
+urllib3>=1.26.0,<3.0.0 # Try a newer urllib3
+six
+selenium
+webdriver-manager
+beautifulsoup4 

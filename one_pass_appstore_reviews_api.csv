@@ -1,0 +1,2 @@
+id,title,content,rating,author,date,version,source
+api_fallback_1,API Access Restricted,"All API methods were tried, but no reviews could be accessed due to Apple's restrictions. Consider using browser automation or manually checking the App Store page.",,System,2025-05-15T09:34:38.707138,N/A,API Fallback
